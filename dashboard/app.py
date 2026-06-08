@@ -8,7 +8,11 @@ st.title("ENTSO-E Grid Load — Anomaly Detection")
 st.caption("Real-time anomaly detection on German electricity grid data")
 
 # Load comparison results
-df = pd.read_csv("data/comparison_results.csv")
+import os
+
+# Work from repo root regardless of where the app runs
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+df = pd.read_csv(os.path.join(ROOT, "data", "comparison_results.csv"))
 df["timestamp"] = pd.to_datetime(df["timestamp"])
 
 # ── Metrics row ───────────────────────────────────────────
