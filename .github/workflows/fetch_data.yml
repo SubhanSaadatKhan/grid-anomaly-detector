@@ -1,0 +1,34 @@
+name: Fetch ENTSO-E Data
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # every 6 hours
+  workflow_dispatch:         # manual trigger button
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install entsoe-py pandas
+
+      - name: Fetch latest data
+        env:
+          ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
+        run: python data/update_data.py
+
+      - name: Commit if new data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/grid_load.csv
+          git diff --cached --quiet || git commit -m "data: auto-update grid load data"
+          git push
