@@ -1,7 +1,8 @@
 import pandas as pd
 from entsoe import EntsoePandasClient
 
-API_KEY = "322c9ed8-e236-4715-845f-1ee24f8d1fd1"
+import os
+API_KEY = os.environ.get("ENTSOE_API_KEY", "your-key-here-for-local-use")
 client = EntsoePandasClient(api_key=API_KEY)
 
 start = pd.Timestamp("2025-02-01", tz="Europe/Berlin")

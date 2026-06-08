@@ -11,7 +11,7 @@ existing["timestamp"] = pd.to_datetime(existing["timestamp"], utc=True)
 
 # Fetch from last timestamp to now
 last = existing["timestamp"].max()
-start = pd.Timestamp(last, tz="Europe/Berlin")
+start = last.tz_convert("Europe/Berlin")
 end   = pd.Timestamp.now(tz="Europe/Berlin")
 
 if (end - start).total_seconds() < 3600:
