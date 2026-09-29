@@ -67,6 +67,7 @@ df_zscore = pd.read_sql("SELECT * FROM readings", conn)
 conn.close()
 
 df_zscore["timestamp"] = pd.to_datetime(df_zscore["timestamp"], utc=True)
+df_zscore = df_zscore.drop_duplicates(subset="timestamp", keep="last")
 
 # Merge on timestamp so both detectors cover the same rows
 df_valid = df_compare.merge(

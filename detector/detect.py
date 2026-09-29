@@ -2,10 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load data
-df = pd.read_csv("data/grid_load.csv", parse_dates=["timestamp"])
+df = pd.read_csv("data/grid_load.csv")
+df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
 
 # Rolling Z-score
-WINDOW = 72        # 72 hourly points = 3 days of context
+WINDOW = 72        # 72 readings x 15 min = 18 hours of context
 THRESHOLD = 2.5    # flag anything beyond 2.5 std deviations
 
 df["rolling_mean"] = df["load_mw"].rolling(WINDOW).mean()

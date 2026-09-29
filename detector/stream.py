@@ -5,8 +5,10 @@ import time
 # Setup SQLite
 conn = sqlite3.connect("data/anomalies.db")
 cursor = conn.cursor()
+# Start fresh each run so re-running the simulation doesn't duplicate readings
+cursor.execute("DROP TABLE IF EXISTS readings")
 cursor.execute("""
-    CREATE TABLE IF NOT EXISTS readings (
+    CREATE TABLE readings (
         timestamp TEXT,
         load_mw REAL,
         rolling_mean REAL,
@@ -18,7 +20,8 @@ cursor.execute("""
 conn.commit()
 
 # Load data
-df = pd.read_csv("data/grid_load.csv", parse_dates=["timestamp"])
+df = pd.read_csv("data/grid_load.csv")
+df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
 
 WINDOW = 72
 THRESHOLD = 2.5
