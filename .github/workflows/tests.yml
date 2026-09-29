@@ -1,0 +1,25 @@
+name: Tests
+
+on:
+  push:
+    paths-ignore:
+      - 'data/grid_load.csv'   # skip the every-6-hours data commits
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install entsoe-py pandas pytest
+
+      - name: Run tests
+        run: pytest tests -v
